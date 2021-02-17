@@ -18,7 +18,7 @@ A simple wrapper utility for enumerating, while iterating the objects in a range
 
 ```cpp
     std::vector<int> ints{1,2,3,4};
-    for(auto&& [i, el] : enumerate(ints)) {
+    for(auto&& [i, el] : cxutils::enumerate(ints)) {
         std::cout << "index: " << i << ", value: " << el << std::endl;
     }
 ```
@@ -38,7 +38,7 @@ Example:
     std::vector<int> A{1,2,3};
     std::vector<int> B{4,5,6};
 
-    for(auto&& [a, b] : zip(A, B)) {
+    for(auto&& [a, b] : cxutils::zip(A, B)) {
         std::cout << a << ", " << b << std::endl;
     }
 ```
@@ -54,11 +54,11 @@ To mutate the elements, you have to do nothing different. So for instance:
     std::vector<int> A{1,2,3};
     std::vector<int> B{4,5,6};
 
-    for(auto&& [a, b] : zip(A, B)) {
-        a =+ b;
-        b += a;
+    for(auto&& [a, b] : cxutils::zip(A, B)) {
+        a += b;
+        b += -b + a;
     }
-    for(auto&& [a, b] : zip(A, B)) {
+    for(auto&& [a, b] : cxutils::zip(A, B)) {
         std::cout << a << ", " << b << std::endl;
     }
 ```
