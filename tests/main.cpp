@@ -84,7 +84,7 @@ int main() {
 
     for (auto &&[a, b] : cxutils::zip(A2, B2)) {
       a += b;
-      b += -b + a;
+      b = a;
     }
     for (auto &&[a, b] : cxutils::zip(A2, B2)) {
       std::cout << a << ", " << b << std::endl;

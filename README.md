@@ -56,7 +56,7 @@ To mutate the elements, you have to do nothing different. So for instance:
 
     for(auto&& [a, b] : cxutils::zip(A, B)) {
         a += b;
-        b += -b + a;
+        b = a;
     }
     for(auto&& [a, b] : cxutils::zip(A, B)) {
         std::cout << a << ", " << b << std::endl;
