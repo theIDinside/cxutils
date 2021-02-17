@@ -13,6 +13,7 @@ target_include_directories(
     $<BUILD_INTERFACE:${CXUTILS_LIB_INCLUDE_DIR}>
     $<INSTALL_INTERFACE:include>
 )
+target_include_directories(cxutils INTERFACE ./include)
 
 add_executable(testutils ./tests/main.cpp)
 target_link_libraries(testutils cxutils)
