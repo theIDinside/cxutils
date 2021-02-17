@@ -44,8 +44,8 @@ Example:
 ```
 
 This will print:
-1, 4
-2, 5
-3, 6
+1, 4<br>
+2, 5<br>
+3, 6<br>
 
 
