@@ -9,6 +9,9 @@ This is confusing, but I think this boils down to C++ more than anything else.
 Therefore, using these functions require you to use either for(auto ...) or for(auto&& ). And as it stands
 right now, they can't be const.
 
+Use at your own will, risk or peril. I am not an expert. But if this inspired you to, to either make something great
+or just to mock my atrocious c++ programming knowledge, let me know! 
+
 ## Enumerate (Enumerator)
 
 A simple wrapper utility for enumerating, while iterating the objects in a range-based for loop
