@@ -5,12 +5,12 @@ set(CMAKE_CXX_STANDARD 20)
 add_library(cxutils INTERFACE)
 
 # This is just to make this library IDE friendly
-target_sources(cxutils INTERFACE include/cxutils/enumerate.hpp include/cxutils/zip.hpp)
+target_sources(cxutils INTERFACE include/cxutils/cxutils.hpp include/cxutils/enumerate.hpp include/cxutils/zip.hpp)
 
 target_include_directories(
     cxutils        
     INTERFACE
-    $<BUILD_INTERFACE:${STATSDB_LIB_INCLUDE_DIR}>
+    $<BUILD_INTERFACE:${CXUTILS_LIB_INCLUDE_DIR}>
     $<INSTALL_INTERFACE:include>
 )
 
