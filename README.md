@@ -48,4 +48,22 @@ This will print:
 2, 5<br>
 3, 6<br>
 
+To mutate the elements, you have to do nothing different. So for instance:
 
+```cpp
+    std::vector<int> A{1,2,3};
+    std::vector<int> B{4,5,6};
+
+    for(auto&& [a, b] : zip(A, B)) {
+        a =+ b;
+        b += a;
+    }
+    for(auto&& [a, b] : zip(A, B)) {
+        std::cout << a << ", " << b << std::endl;
+    }
+```
+
+Will print 
+5, 5<br>
+7, 7<br>
+9, 9<br>
