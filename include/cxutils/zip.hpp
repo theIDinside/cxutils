@@ -3,30 +3,23 @@
 
 namespace cxutils {
 
-template <Iterable I> using CleanType = std::decay_t<I>;
+template <Iterable I> using IteratorOf = typename std::decay_t<I>::iterator;
+template <Iterable I> using ElementReferenceOf = typename std::decay_t<I>::reference;
 
 template <Iterable ItA, Iterable ItB, Iterable ItC> class ZipThree {
 private:
-  using IteratorA = typename CleanType<ItA>::iterator;
-  using IteratorB = typename CleanType<ItB>::iterator;
-  using IteratorC = typename CleanType<ItC>::iterator;
+  IteratorOf<ItA> iter_a;
+  IteratorOf<ItB> iter_b;
+  IteratorOf<ItC> iter_c;
 
-  using DerefA = typename CleanType<ItA>::reference;
-  using DerefB = typename CleanType<ItB>::reference;
-  using DerefC = typename CleanType<ItC>::reference;
-
-  IteratorA iter_a;
-  IteratorB iter_b;
-  IteratorC iter_c;
-
-  IteratorA iter_a_end;
-  IteratorB iter_b_end;
-  IteratorC iter_c_end;
+  IteratorOf<ItA> iter_a_end;
+  IteratorOf<ItB> iter_b_end;
+  IteratorOf<ItC> iter_c_end;
 
   struct Zipped {
-    DerefA a;
-    DerefB b;
-    DerefC c;
+    ElementReferenceOf<ItA> a;
+    ElementReferenceOf<ItB> b;
+    ElementReferenceOf<ItC> c;
   };
 
 public:
@@ -61,21 +54,15 @@ constexpr auto zip_three(ItA &&iterA, ItB &&iterB, ItC &&iterC) {
 
 template <Iterable ItA, Iterable ItB> class ZipTwo {
 private:
-  using IteratorA = typename CleanType<ItA>::iterator;
-  using IteratorB = typename CleanType<ItB>::iterator;
+  IteratorOf<ItA> iter_a;
+  IteratorOf<ItB> iter_b;
 
-  using DerefA = typename CleanType<ItA>::reference;
-  using DerefB = typename CleanType<ItB>::reference;
-
-  IteratorA iter_a;
-  IteratorB iter_b;
-
-  IteratorA iter_a_end;
-  IteratorB iter_b_end;
+  IteratorOf<ItA> iter_a_end;
+  IteratorOf<ItB> iter_b_end;
 
   struct Zipped {
-    DerefA a;
-    DerefB b;
+    ElementReferenceOf<ItA> a;
+    ElementReferenceOf<ItB> b;
   };
 
 public:
