@@ -8,6 +8,10 @@
 #include <iostream>
 #include <ranges>
 #include <vector>
+#include <tuple>
+#include <type_traits>
+#include <initializer_list>
+
 
 /// Notice that using my utils, when iterating you shall not write for(auto&
 /// ...), as this will be a compiler error Because in C++ we have no (as far as
@@ -27,7 +31,7 @@ int main() {
   std::array<char, 7> B{'e', 'l', ',', 'w', 'r', 'd', '!'};
 
   // zip-iterating over A and B
-  for (auto &&[a, b] : cxutils::zip(A, B)) {
+  for (auto &&[a, b] : cxutils::zip_two(A, B)) {
     std::cout << a << b;
   }
   // output: "hello, world!!"
@@ -50,7 +54,7 @@ int main() {
       'r', 'd', '!'}; // last ! char to show that zip(..) ends as soon as one
                       // container runs out of elements
 
-  for (auto &&[a, b] : cxutils::zip(A2, B2)) {
+  for (auto &&[a, b] : cxutils::zip_two(A2, B2)) {
     std::cout << a << b;
   }
   // output: "hello, world"
@@ -59,7 +63,7 @@ int main() {
   std::vector<double> d{3.1, 2.2, 1.3};
 
   // zip-iterating over two containers with different "Container::value_type"s
-  for (auto &&[a, b] : cxutils::zip(i, d)) {
+  for (auto &&[a, b] : cxutils::zip_two(i, d)) {
     std::cout << a << ", " << b << std::endl;
   }
   // output:
@@ -68,12 +72,12 @@ int main() {
   // 3, 1.3
 
   // mutating the containers A and B:
-  for (auto &&[a, b] : cxutils::zip(A, B)) {
+  for (auto &&[a, b] : cxutils::zip_two(A, B)) {
     a = std::toupper(a);
     b = std::toupper(b);
   }
   // after uppercase
-  for (auto &&[a, b] : cxutils::zip(A, B)) {
+  for (auto &&[a, b] : cxutils::zip_two(A, B)) {
     std::cout << a << b;
   }
   // output: "HELLO, WORLD!!"
@@ -82,12 +86,31 @@ int main() {
     std::vector<int> A2{1, 2, 3};
     std::vector<int> B2{4, 5, 6};
 
-    for (auto &&[a, b] : cxutils::zip(A2, B2)) {
+    for (auto &&[a, b] : cxutils::zip_two(A2, B2)) {
       a += b;
       b = a;
     }
-    for (auto &&[a, b] : cxutils::zip(A2, B2)) {
+    for (auto &&[a, b] : cxutils::zip_two(A2, B2)) {
       std::cout << a << ", " << b << std::endl;
+    }
+    auto f = cxutils::zip_two(A2, B2);
+    std::cout << std::endl;
+  }
+
+  {
+    std::vector<int> ca{1, 2, 3};
+    std::vector<int> cb{4, 5, 6};
+    std::vector<int> cc{7, 8, 9};
+
+    for(auto&& [a, b, c] : cxutils::zip_three(ca, cb, cc)) {
+      std::cout << "a: " << a << ", b: " << b << ", c: " << c << "\n";
+      a *= 10;
+      b *= 20;
+      c *= 30;
+    }
+    std::cout << "after mutation:\n";
+    for(auto&& [a, b, c] : cxutils::zip_three(ca, cb, cc)) {
+      std::cout << "a: " << a << ", b: " << b << ", c: " << c << "\n";
     }
   }
 }

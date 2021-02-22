@@ -7,4 +7,6 @@ concept Iterable = requires(Container c) {
     std::end(c);
     c.begin();
     c.end();
+    typename std::decay_t<Container>::iterator;
+    typename std::decay_t<Container>::reference;
 };

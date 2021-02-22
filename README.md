@@ -29,7 +29,7 @@ index: 1, value: 2
 index: 2, value: 3
 index: 3, value: 4
 
-## Zip iterator (Ziperator)
+## Zip iterator (ZipTwo)
 
 Zips together two iterators from two containers, and iterates until one of them reaches it's end.
 
