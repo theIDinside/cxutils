@@ -4,7 +4,8 @@
 namespace cxutils {
 
 template <Iterable I> using IteratorOf = typename std::decay_t<I>::iterator;
-template <Iterable I> using ElementReferenceOf = typename std::decay_t<I>::reference;
+template <Iterable I>
+using ElementReferenceOf = typename std::decay_t<I>::reference;
 
 template <Iterable ItA, Iterable ItB, Iterable ItC> class ZipThree {
 private:
@@ -50,6 +51,11 @@ constexpr auto zip_three(ItA &&iterA, ItB &&iterB, ItC &&iterC) {
   return ZipThree<ItA, ItB, ItC>{iterA, iterB, iterC};
 }
 
+template <Iterable ItA, Iterable ItB, Iterable ItC>
+constexpr auto zip_three(const ItA &iterA, const ItB &iterB, const ItC &iterC) {
+  return ZipThree<ItA, ItB, ItC>{iterA, iterB, iterC};
+}
+
 // used to make for instance std::array<char, 4>& -> std::array<char, 4>
 
 template <Iterable ItA, Iterable ItB> class ZipTwo {
@@ -88,6 +94,11 @@ public:
 
 template <Iterable ItA, Iterable ItB>
 constexpr auto zip_two(ItA &&iterA, ItB &&iterB) {
+  return ZipTwo<ItA, ItB>{iterA, iterB};
+}
+
+template <Iterable ItA, Iterable ItB>
+constexpr auto zip_two(const ItA &iterA, const ItB &iterB) {
   return ZipTwo<ItA, ItB>{iterA, iterB};
 }
 
