@@ -5,13 +5,14 @@
 #include <algorithm>
 #include <array>
 #include <cctype>
+#include <cxutils/transform.hpp>
+#include <initializer_list>
 #include <iostream>
 #include <ranges>
-#include <vector>
 #include <tuple>
 #include <type_traits>
-#include <initializer_list>
-
+#include <vector>
+#include <string>
 
 /// Notice that using my utils, when iterating you shall not write for(auto&
 /// ...), as this will be a compiler error Because in C++ we have no (as far as
@@ -25,6 +26,16 @@
 /// hope. Lol
 
 int main() {
+
+  std::vector<int> ints_vec{1,2,3,4,5};
+  auto str_ints = cxutils::transform(ints_vec, [](auto i) {
+    return "Str-result: " + std::to_string(i);
+  });
+  std::cout << "integer values transformed to strings:\n";
+  for(const auto& si : str_ints) {
+    std::cout << si << std::endl;
+  }
+
   std::array<char, 8> A{'h', 'l', 'o', ' ', 'o',
                         'l', '!', '_'}; // last _ char to show that zip(..) ends
                                         // as soon as one container runs out
