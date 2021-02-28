@@ -24,14 +24,14 @@ int collect_sums_of_vectors(IntVecRef a, IntVecRef b, IntVecRef c); // defined s
 
 namespace cl = cxutils::log;
 auto main() {
-    auto intVector = get_vec();
-    auto time_to_sum_vector = cl::time_and_log(sum_vector, intVector);
+    const auto intVector = get_vec();
+    const auto time_to_sum_vector = cl::time_and_log(sum_vector, intVector);
     
-    auto a = get_vec(); 
-    auto b = get_vec();
-    auto c = get_vec();
+    const auto a = get_vec(); 
+    const auto b = get_vec();
+    const auto c = get_vec();
     
-    auto time_to_sum_all = cl::time_and_log(collect_sums_of_vectors, a, b, c);
+    const auto time_to_sum_all = cl::time_and_log(collect_sums_of_vectors, a, b, c);
 }
 ```
 
@@ -45,13 +45,13 @@ should be able to deduce it by the parameters we've passed in. For some reason, 
 
 So timing the filling of a vector with the value -1 would look like this:
 
-```cpp 
+```cpp
 namespace cl = cxutils::log;
 IntVec get_vec(); // defined somewhere, gives us a vector of ints
 // First we need the type, so we need to fill in the template parameters
 using fnType = decltype(std::fill<std::vector<int>::iterator, int>);
-auto v = get_vec();
-auto fill_time = cl::time_and_log<cl::msec, fnType>(std::fill, v.begin(), v.end(), -1);
+const auto v = get_vec();
+const auto fill_time = cl::time_and_log<cl::msec, fnType>(std::fill, v.begin(), v.end(), -1);
 ```
 
 As we can see the first template parameter is cl::msec (millsecond), which is the defaulted template parameter otherwise.
