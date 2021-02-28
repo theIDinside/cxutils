@@ -3,10 +3,6 @@
 
 namespace cxutils {
 
-template <Iterable I> using IteratorOf = typename std::decay_t<I>::iterator;
-template <Iterable I>
-using ElementReferenceOf = typename std::decay_t<I>::reference;
-
 template <Iterable ItA, Iterable ItB, Iterable ItC> class ZipThree {
 private:
   IteratorOf<ItA> iter_a;
@@ -70,12 +66,13 @@ private:
     ElementReferenceOf<ItA> a;
     ElementReferenceOf<ItB> b;
   };
+  std::size_t size_;
 
 public:
   using range_difference_t = std::size_t;
   constexpr ZipTwo(ItA itA, ItB itB) noexcept
       : iter_a(itA.begin()), iter_b(itB.begin()), iter_a_end(itA.end()),
-        iter_b_end(itB.end()) {}
+        iter_b_end(itB.end()), size_(std::min(itA.size(), itB.size())) {}
   constexpr auto begin() const { return *this; }
   constexpr auto end() const { return *this; }
 
@@ -90,6 +87,7 @@ public:
   }
 
   constexpr auto operator*() const -> Zipped { return {*iter_a, *iter_b}; }
+  constexpr auto size() const { return size_; }
 };
 
 template <Iterable ItA, Iterable ItB>
