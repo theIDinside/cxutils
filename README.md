@@ -84,12 +84,15 @@ index: 3, value: 4
 
 Zips together two iterators from two containers, and iterates until one of them reaches it's end.
 
+Due to the fact that my template programming skills in C++ is lacking, the header contains zip_two and zip_three, instead of 
+some fancy magic that can get called with just zip(...). Which would be preferable. But it is what it is.
+
 Example:
 ```cpp
     std::vector<int> A{1,2,3};
     std::vector<int> B{4,5,6};
 
-    for(auto&& [a, b] : cxutils::zip(A, B)) {
+    for(auto&& [a, b] : cxutils::zip_two(A, B)) {
         std::cout << a << ", " << b << std::endl;
     }
 ```
@@ -105,11 +108,11 @@ To mutate the elements, you have to do nothing different. So for instance:
     std::vector<int> A{1,2,3};
     std::vector<int> B{4,5,6};
 
-    for(auto&& [a, b] : cxutils::zip(A, B)) {
+    for(auto&& [a, b] : cxutils::zip_two(A, B)) {
         a += b;
         b = a;
     }
-    for(auto&& [a, b] : cxutils::zip(A, B)) {
+    for(auto&& [a, b] : cxutils::zip_two(A, B)) {
         std::cout << a << ", " << b << std::endl;
     }
 ```
@@ -118,3 +121,5 @@ Will print
 5, 5<br>
 7, 7<br>
 9, 9<br>
+
+Zipping three iterators, work exactly the same, with the call being to ```cxutils::zip_three(a, b, c)```
