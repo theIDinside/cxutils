@@ -1,5 +1,6 @@
 #pragma once
 #include "concepts.hpp"
+#include <iterator>
 
 namespace cxutils
 {
@@ -7,19 +8,21 @@ namespace cxutils
     class Enumerator {
     private:
         It it;
-        using Iterator = decltype(it.begin());
-        using Deref = decltype(*it.begin());
 
         std::size_t index;
-        Iterator curr;
-        const Iterator sentinel;
+        IteratorOf<It> curr;
+        const IteratorOf<It> sentinel;
 
         struct Enumerated {
             std::size_t idx;
-            Deref ref;
+            ElementReferenceOf<It> ref;
         };
 
     public:
+        using reference = Enumerated&;
+        using value_type = Enumerated;
+        using iterator = IteratorOf<It>;
+
         Enumerator(It iterable) noexcept : it(iterable), index(0),
                                            curr(std::begin(iterable)),
                                            sentinel(std::end(iterable)) {}
@@ -35,6 +38,7 @@ namespace cxutils
         }
 
         auto operator*() const -> Enumerated { return {index, *curr}; }
+        auto size() const { return it.size(); }
     };
 
     template<Iterable It>
