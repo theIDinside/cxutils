@@ -1,5 +1,6 @@
 #pragma once
 #include <algorithm>
+#include <type_traits>
 
 template<typename Container>
 concept Iterable = requires(Container c) {
@@ -14,3 +15,9 @@ concept Iterable = requires(Container c) {
     typename std::decay_t<Container>::reference;
     typename std::decay_t<Container>::value_type;
 };
+
+template <Iterable I> using IteratorOf = typename std::decay_t<I>::iterator;
+template <Iterable I>
+using ElementReferenceOf = typename std::decay_t<I>::reference;
+template <Iterable I>
+using ElementValueTypeOf = typename std::decay_t<I>::value_type;
