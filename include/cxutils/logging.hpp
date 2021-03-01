@@ -30,7 +30,7 @@ template <AcceptedDuration Duration = usec, typename Fn,
           typename... FnParameters>
 constexpr auto time_and_log(Fn &&f, FnParameters &&...fn_args) {
   auto begin = hiResClock::now();
-  f(fn_args...);
+  f(std::forward<FnParameters>(fn_args)...);
   auto end = hiResClock::now();
   auto dur = std::chrono::duration_cast<Duration>(end - begin).count();
   return dur;
