@@ -114,8 +114,11 @@ public:
   constexpr Zip(
       Its &&...its) // : it_begins(its.begin()...), it_ends(its.end()...)
       noexcept {
+#ifdef DEBUG
+    std::cout << "Sizes of containers: ";
     ((std::cout << (its.size()) << ","), ...);
     std::cout << std::endl;
+#endif
     init_begin_iters((its.begin())...);
     init_end_iters((its.end())...);
   }
@@ -210,16 +213,16 @@ public:
       auto &[a, b] = it_begins;
       return {*a, *b};
     } else if constexpr (size_ == 3) {
-      auto [a, b, c] = it_begins;
+      auto &[a, b, c] = it_begins;
       return {*a, *b, *c};
     } else if constexpr (size_ == 4) {
-      auto [a, b, c, d] = it_begins;
+      auto &[a, b, c, d] = it_begins;
       return {*a, *b, *c, *d};
     } else if constexpr (size_ == 5) {
-      auto [a, b, c, d, e] = it_begins;
+      auto &[a, b, c, d, e] = it_begins;
       return {*a, *b, *c, *d, *e};
     } else if constexpr (size_ == 6) {
-      auto [a, b, c, d, e, f] = it_begins;
+      auto &[a, b, c, d, e, f] = it_begins;
       return {*a, *b, *c, *d, *e, *f};
     } else {
       static_assert(
