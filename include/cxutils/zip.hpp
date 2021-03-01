@@ -95,13 +95,8 @@ constexpr auto zip_two(ItA &&iterA, ItB &&iterB) {
   return ZipTwo<ItA, ItB>{iterA, iterB};
 }
 
-template <Iterable ItA, Iterable ItB>
-constexpr auto zip_two(const ItA &iterA, const ItB &iterB) {
-  return ZipTwo<ItA, ItB>{iterA, iterB};
-}
-
 /// The fully variadic template version of Zip, taking anywhere between [2<=6]
-/// container iterators
+/// containers to iterate over.
 template <Iterable... Its> class Zip {
 private:
   std::tuple<IteratorOf<Its>...> it_begins;
@@ -112,15 +107,17 @@ private:
   constexpr static auto size_ = sizeof...(Its);
 
 public:
-  constexpr Zip(Its &&...its) noexcept {
+  constexpr explicit Zip(Its &&...its) noexcept {
 #ifdef DEBUG
     std::cout << "Sizes of containers: ";
     ((std::cout << (its.size()) << ","), ...);
     std::cout << std::endl;
 #endif
-    static_assert(sizeof...(its) >= 2 && sizeof...(its) <= 6, "Zip only supports 2 to 6 containers to iterate over. This is arbitrary. But so is life. So f##k you.");
-    init_begin_iters((its.begin())...);
-    init_end_iters((its.end())...);
+    static_assert(size() >= 2 && size() <= 6,
+                  "Zip only supports 2 to 6 containers to iterate over. This "
+                  "is arbitrary. But so is life. So f##k you.");
+    init_begin_iters(its.begin()...);
+    init_end_iters(its.end()...);
   }
   constexpr auto begin() const { return *this; }
   constexpr auto end() const { return *this; }
@@ -128,7 +125,8 @@ public:
   template <typename... Iterators>
   constexpr auto init_begin_iters(Iterators &&...iters) {
 #ifdef DEBUG
-    std::cout << "begin Iters inited: " << sizeof...(iters) << std::endl;
+    std::cout << "begin Iters inited: " << sizeof...(iters)
+              << "begin values:" << std::endl;
     ((std::cout << (*iters) << ","), ...);
 #endif
     it_begins = std::make_tuple(std::forward<Iterators>(iters)...);
@@ -142,7 +140,12 @@ public:
     it_ends = std::make_tuple(std::forward<Iterators>(iters)...);
   }
 
+  /// Constexpr magic. This boils away. Or at least I think it does.
+  /// Perhaps? Yes. Yes? Yes. Maybe.
   constexpr bool operator!=(const Zip<Its...> &) const {
+    static_assert(size() >= 2 && size() <= 6,
+                  "The ziperator currently only supports [2<=6] iterators. "
+                  "Because I am hacking this together");
     if constexpr (size_ == 2) {
       const auto &[a_b, b_b] = it_begins;
       const auto &[a_e, b_e] = it_ends;
@@ -164,13 +167,13 @@ public:
       const auto &[a_e, b_e, c_e, d_e, e_e, f_e] = it_ends;
       return a_b != a_e && b_b != b_e && c_b != c_e && d_b != d_e &&
              e_b != e_e && f_b != f_e;
-    } else {
-      static_assert(false, "The ziperator currently only supports [2<=6] iterators. "
-                           "Because I am hacking this together");
     }
   }
 
   constexpr Zip &operator++() {
+    static_assert(size() >= 2 && size() <= 6,
+                  "The ziperator currently only supports [2<=6] iterators. "
+                  "Because I am hacking this together");
     if constexpr (size_ == 2) {
       auto &[a, b] = it_begins;
       a++;
@@ -201,14 +204,14 @@ public:
       d++;
       e++;
       f++;
-    } else {
-      static_assert(false, "The ziperator currently only supports [2<=6] iterators. "
-                           "Because I am hacking this together");
     }
     return *this;
   }
 
   constexpr auto operator*() const -> Zipped {
+    static_assert(size() >= 2 && size() <= 6,
+                  "The ziperator currently only supports [2<=6] container "
+                  "iterators. Live with it");
     if constexpr (size_ == 2) {
       auto &[a, b] = it_begins;
       return {*a, *b};
@@ -224,14 +227,10 @@ public:
     } else if constexpr (size_ == 6) {
       auto &[a, b, c, d, e, f] = it_begins;
       return {*a, *b, *c, *d, *e, *f};
-    } else {
-      static_assert(
-          false,
-          "The ziperator currently only supports [2<=6] container iterators. Live with it");
     }
   }
 
-  constexpr auto size() const { return size_; }
+  static constexpr auto size() { return size_; }
 };
 
 /// Interface via which we use the Zip-iterator.
