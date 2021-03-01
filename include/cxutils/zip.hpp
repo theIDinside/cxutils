@@ -118,6 +118,7 @@ public:
     ((std::cout << (its.size()) << ","), ...);
     std::cout << std::endl;
 #endif
+    static_assert(sizeof...(its) >= 2 && sizeof...(its) <= 6, "Zip only supports 2 to 6 containers to iterate over. This is arbitrary. But so is life. So f##k you.");
     init_begin_iters((its.begin())...);
     init_end_iters((its.end())...);
   }
