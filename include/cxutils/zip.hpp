@@ -164,7 +164,7 @@ public:
       return a_b != a_e && b_b != b_e && c_b != c_e && d_b != d_e &&
              e_b != e_e && f_b != f_e;
     } else {
-      static_assert(false, "The ziperator currently only supports 4 iterators. "
+      static_assert(false, "The ziperator currently only supports [2<=6] iterators. "
                            "Because I am hacking this together");
     }
   }
@@ -201,7 +201,7 @@ public:
       e++;
       f++;
     } else {
-      static_assert(false, "The ziperator currently only supports 6 iterators. "
+      static_assert(false, "The ziperator currently only supports [2<=6] iterators. "
                            "Because I am hacking this together");
     }
     return *this;
@@ -226,7 +226,7 @@ public:
     } else {
       static_assert(
           false,
-          "The ziperator currently only supports 6 iterators. Live with it");
+          "The ziperator currently only supports [2<=6] container iterators. Live with it");
     }
   }
 
