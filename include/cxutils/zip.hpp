@@ -100,6 +100,8 @@ constexpr auto zip_two(const ItA &iterA, const ItB &iterB) {
   return ZipTwo<ItA, ItB>{iterA, iterB};
 }
 
+/// The fully variadic template version of Zip, taking anywhere between [2<=6]
+/// container iterators
 template <Iterable... Its> class Zip {
 private:
   std::tuple<IteratorOf<Its>...> it_begins;
@@ -110,10 +112,7 @@ private:
   constexpr static auto size_ = sizeof...(Its);
 
 public:
-  using range_difference_t = std::size_t;
-  constexpr Zip(
-      Its &&...its) // : it_begins(its.begin()...), it_ends(its.end()...)
-      noexcept {
+  constexpr Zip(Its &&...its) noexcept {
 #ifdef DEBUG
     std::cout << "Sizes of containers: ";
     ((std::cout << (its.size()) << ","), ...);
@@ -144,24 +143,24 @@ public:
 
   constexpr bool operator!=(const Zip<Its...> &) const {
     if constexpr (size_ == 2) {
-      const auto& [a_b, b_b] = it_begins;
-      const auto& [a_e, b_e] = it_ends;
+      const auto &[a_b, b_b] = it_begins;
+      const auto &[a_e, b_e] = it_ends;
       return a_b != a_e && b_b != b_e;
     } else if constexpr (size_ == 3) {
-      const auto& [a_b, b_b, c_b] = it_begins;
-      const auto& [a_e, b_e, c_e] = it_ends;
+      const auto &[a_b, b_b, c_b] = it_begins;
+      const auto &[a_e, b_e, c_e] = it_ends;
       return a_b != a_e && b_b != b_e && c_b != c_e;
     } else if constexpr (size_ == 4) {
-      const auto& [a_b, b_b, c_b, d_b] = it_begins;
-      const auto& [a_e, b_e, c_e, d_e] = it_ends;
+      const auto &[a_b, b_b, c_b, d_b] = it_begins;
+      const auto &[a_e, b_e, c_e, d_e] = it_ends;
       return a_b != a_e && b_b != b_e && c_b != c_e && d_b != d_e;
     } else if constexpr (size_ == 5) {
-      const auto& [a_b, b_b, c_b, d_b, e_b] = it_begins;
-      const auto& [a_e, b_e, c_e, d_e, e_e] = it_ends;
+      const auto &[a_b, b_b, c_b, d_b, e_b] = it_begins;
+      const auto &[a_e, b_e, c_e, d_e, e_e] = it_ends;
       return a_b != a_e && b_b != b_e && c_b != c_e && d_b != d_e && e_b != e_e;
     } else if constexpr (size_ == 6) {
-      const auto& [a_b, b_b, c_b, d_b, e_b, f_b] = it_begins;
-      const auto& [a_e, b_e, c_e, d_e, e_e, f_e] = it_ends;
+      const auto &[a_b, b_b, c_b, d_b, e_b, f_b] = it_begins;
+      const auto &[a_e, b_e, c_e, d_e, e_e, f_e] = it_ends;
       return a_b != a_e && b_b != b_e && c_b != c_e && d_b != d_e &&
              e_b != e_e && f_b != f_e;
     } else {
@@ -234,6 +233,7 @@ public:
   constexpr auto size() const { return size_; }
 };
 
+/// Interface via which we use the Zip-iterator.
 template <Iterable... Its> constexpr auto zip(Its &&...its) {
   return Zip<Its...>{std::forward<Its>(its)...};
 }
