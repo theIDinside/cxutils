@@ -87,6 +87,10 @@ Zips together two iterators from two containers, and iterates until one of them 
 Due to the fact that my template programming skills in C++ is lacking, the header contains zip_two and zip_three, instead of 
 some fancy magic that can get called with just zip(...). Which would be preferable. But it is what it is.
 
+``` cxutils::zip(...)``` now does exist and it can take up to 6 containers. This is done using some extra-ordinary fine
+hack and slashing by me, which I am utterly shamelessly, ignorantly proud of with some if constexpr hacking and 
+destructuring of std::tuples. Damn that was satisfying, yet horrible and non-extensive looking. Love it still.
+
 Example:
 ```cpp
     std::vector<int> A{1,2,3};
@@ -94,6 +98,12 @@ Example:
 
     for(auto&& [a, b] : cxutils::zip_two(A, B)) {
         std::cout << a << ", " << b << std::endl;
+    }
+    // can now be written
+    for(auto&& [a, b] : cxutils::zip(A, B)) { /* ... */ }
+    // or if we want to for some god ugly unknown reason, we can do this;
+    for(auto&& [a, b, a2, b2, a3] : cxutils::zip(A, B, A, B, A)) {
+        // please lord why
     }
 ```
 

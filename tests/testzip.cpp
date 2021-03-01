@@ -29,32 +29,18 @@ int main() {
       'r', 'd', '!'}; // last ! char to show that zip(..) ends as soon as one
   // container runs out of elements
 
-  for (auto &&[a, b] : cxutils::zip_two(A2, B2)) {
+  for (auto [a, b] : cxutils::zip_two(A2, B2)) {
     std::cout << a << b;
   }
   // output: "hello, world"
   std::cout << std::endl;
-  std::vector<int> i{1, 2, 3};
+  std::vector<int> i{11, 22, 33};
   std::vector<double> d{3.1, 2.2, 1.3};
 
-  // zip-iterating over two containers with different "Container::value_type"s
-  for (auto &&[a, b] : cxutils::zip_two(i, d)) {
-    std::cout << a << ", " << b << std::endl;
-  }
-
-  // mutating the containers A and B:
-  for (auto &&[a, b] : cxutils::zip_two(A, B)) {
-    a = std::toupper(a);
-    b = std::toupper(b);
-  }
-  // after uppercase
-  for (auto &&[a, b] : cxutils::zip_two(A, B)) {
-    std::cout << a << b;
-  }
-
   std::vector<int> ca{1, 2, 3};
-  std::vector<int> cb{4, 5, 6};
-  std::vector<int> cc{7, 8, 9};
+  std::vector<int> cb{4, 5, 6, 7};
+  std::vector<int> cc{7, 8, 9, 10, 11};
+
 
   for(auto&& [a, b, c] : cxutils::zip_three(ca, cb, cc)) {
     std::cout << "a: " << a << ", b: " << b << ", c: " << c << "\n";
@@ -62,8 +48,29 @@ int main() {
     b *= 20;
     c *= 30;
   }
-  std::cout << "after mutation:\n";
-  for(auto&& [a, b, c] : cxutils::zip_three(ca, cb, cc)) {
+
+  std::cout << "using my variadic template version, statically dispatching to ZipTwo and ZipThree...:" << std::endl;
+  for(auto&& [a, b, c] : cxutils::zip(ca, cb, cc)) {
     std::cout << "a: " << a << ", b: " << b << ", c: " << c << "\n";
   }
+
+
+  std::cout << "using my fully variadic template version:" << std::endl;
+  for(auto&& [a, b, c, d] : cxutils::zip(ca, cb, cc, i)) {
+    std::cout << "a: " << a
+              << ", b: " << b
+              << ", c: " << c
+              << ", d: " << d
+        << "\n";
+    a += b;
+    b += c;
+    c += d;
+  }
+
+  std::cout << "after mutation:\n";
+  for(auto&& [a, b, c] : cxutils::zip(ca, cb, cc)) {
+    std::cout << "a: " << a << ", b: " << b << ", c: " << c << "\n";
+  }
+
+
 }
