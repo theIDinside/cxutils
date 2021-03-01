@@ -141,24 +141,24 @@ public:
 
   constexpr bool operator!=(const Zip<Its...> &) const {
     if constexpr (size_ == 2) {
-      auto [a_b, b_b] = it_begins;
-      auto [a_e, b_e] = it_ends;
+      const auto& [a_b, b_b] = it_begins;
+      const auto& [a_e, b_e] = it_ends;
       return a_b != a_e && b_b != b_e;
     } else if constexpr (size_ == 3) {
-      auto [a_b, b_b, c_b] = it_begins;
-      auto [a_e, b_e, c_e] = it_ends;
+      const auto& [a_b, b_b, c_b] = it_begins;
+      const auto& [a_e, b_e, c_e] = it_ends;
       return a_b != a_e && b_b != b_e && c_b != c_e;
     } else if constexpr (size_ == 4) {
-      auto [a_b, b_b, c_b, d_b] = it_begins;
-      auto [a_e, b_e, c_e, d_e] = it_ends;
+      const auto& [a_b, b_b, c_b, d_b] = it_begins;
+      const auto& [a_e, b_e, c_e, d_e] = it_ends;
       return a_b != a_e && b_b != b_e && c_b != c_e && d_b != d_e;
     } else if constexpr (size_ == 5) {
-      auto [a_b, b_b, c_b, d_b, e_b] = it_begins;
-      auto [a_e, b_e, c_e, d_e, e_e] = it_ends;
+      const auto& [a_b, b_b, c_b, d_b, e_b] = it_begins;
+      const auto& [a_e, b_e, c_e, d_e, e_e] = it_ends;
       return a_b != a_e && b_b != b_e && c_b != c_e && d_b != d_e && e_b != e_e;
     } else if constexpr (size_ == 6) {
-      auto [a_b, b_b, c_b, d_b, e_b, f_b] = it_begins;
-      auto [a_e, b_e, c_e, d_e, e_e, f_e] = it_ends;
+      const auto& [a_b, b_b, c_b, d_b, e_b, f_b] = it_begins;
+      const auto& [a_e, b_e, c_e, d_e, e_e, f_e] = it_ends;
       return a_b != a_e && b_b != b_e && c_b != c_e && d_b != d_e &&
              e_b != e_e && f_b != f_e;
     } else {
@@ -199,7 +199,7 @@ public:
       e++;
       f++;
     } else {
-      static_assert(false, "The ziperator currently only supports 4 iterators. "
+      static_assert(false, "The ziperator currently only supports 6 iterators. "
                            "Because I am hacking this together");
     }
     return *this;

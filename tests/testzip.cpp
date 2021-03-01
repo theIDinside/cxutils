@@ -67,9 +67,9 @@ int main() {
     c += d;
   }
 
-  std::cout << "after mutation:\n";
-  for(auto&& [a, b, c] : cxutils::zip(ca, cb, cc)) {
-    std::cout << "a: " << a << ", b: " << b << ", c: " << c << "\n";
+  std::cout << "after mutation. d is the only non-mutated element:\n";
+  for(auto [a, b, c, d] : cxutils::zip(ca, cb, cc, i)) {
+    std::cout << "a: " << a << ", b: " << b << ", c: " << c << ", d: " << d << "\n";
   }
 
 
