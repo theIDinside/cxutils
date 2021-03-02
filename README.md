@@ -1,19 +1,50 @@
 # C++ utils
 
-The utility functions enumerate(...) and zip(...) returns a reference to the elements in the containers.
-However, since I'm not a master-expert at c++, and since I think C++ has some flaws, to iterate over the
-references, you don't do for(const auto& ...) nor for(auto& ..) because that & refers to the returned
-object holding the {index, value} pair, or the {value, value} pair, not the actual values they hold. 
-This is confusing, but I think this boils down to C++ more than anything else. 
+## Usage
 
-Therefore, using these functions require you to use either for(auto ...) or for(auto&& ). And as it stands
-right now, they can't be const.
+### Requirements
+- c++20 / c++latest <br> 
+  I've deliberately written this in C++20 as it simplifies usage of template "meta" programming, and a bunch 
+  of other things. But since I'm entirely a novice in that kind of stuff, the Ziperator for instance
+  can _not_ iterate over containers of type ```const container<T>```. Also, when using in a range-for-loop one 
+  can't write ```const auto```, just use ```auto``` or ```auto&&```. I would blame C++ for being horrible
+  in how one implements iterators, but I'm sure it's due to me being a 'moron' too. With all caveats out of the way, 
+  lets get into it.
+- cmake version 3.15 (I think), whatever version that has the feature "FetchContent" (or you can clone it manually to
+  a subdirectory, and add "add_subdirectory(to_cloned_path)". I prefer the "build system" approach though.)
 
-Use at your own will, risk or peril. I am not an expert. But if this inspired you to, to either make something great
-or just to mock my atrocious c++ programming knowledge, let me know! 
+### CMake settings
+The "build system approach", that I spoke of earlier:
+In your CMakeLists.txt file, put:
+
+```cmake
+include(FetchContent)
+FetchContent_Declare(
+        cxutils
+        GIT_REPOSITORY https://github.com/theIDinside/cxutils.git
+        GIT_TAG master
+        GIT_PROGRESS TRUE
+)
+FetchContent_GetProperties(cxutils)
+if (NOT cxutils_POPULATED)
+    FetchContent_Populate(cxutils)
+    add_subdirectory(${cxutils_SOURCE_DIR} ${cxutils_BINARY_DIR})
+endif()
+
+# If you are compiling a target called "myproj", just add
+target_link_libraries(myproj cxutils)
+```
+Now you can for instance do;
+```cpp
+#include <cxutils/zip.hpp>
+```
+
+And start using the "library".
+
+Use at your own will, risk or peril. 
 
 ## Logging
-With the function time_and_log in logging.hpp, timing the execution of a function, becomes easy:
+With the function time_and_log in logging.hpp, timing the execution of a function, becomes easy to remember:
 ```cpp
 using IntVec = std::vector<int>;
 using IntVecRef = const IntVec&;
@@ -59,10 +90,6 @@ As we can see the first template parameter is cl::msec (millsecond), which is th
 This template is a concept, called AcceptedDuration is either cl::nsec, cl::usec, cl::msec, cl::sec, which are
 all type aliases for std::chrono::duration::nano/micro/milli/second.
 
-The second parameter is the type of the templated function we have passed in there. For some weird reason, C++
-can't deduce this for me. Which is strange. Seriously, it is strange. I'm a dummy and I think this really should
-have been solved.
-
 ## Enumerate (Enumerator)
 
 A simple wrapper utility for enumerating, while iterating the objects in a range-based for loop
@@ -80,31 +107,36 @@ index: 1, value: 2
 index: 2, value: 3
 index: 3, value: 4
 
-## Zip iterator (ZipTwo)
+## Zip-iterator
 
-Zips together two iterators from two containers, and iterates until one of them reaches it's end.
-
-Due to the fact that my template programming skills in C++ is lacking, the header contains zip_two and zip_three, instead of 
-some fancy magic that can get called with just zip(...). Which would be preferable. But it is what it is.
+Zips together 2 or more (up to 6) iterators from two containers, and iterates until one of them reaches it's end.
 
 ``` cxutils::zip(...)``` now does exist and it can take up to 6 containers. This is done using some extra-ordinary fine
 hack and slashing by me, which I am utterly shamelessly, ignorantly proud of with some if constexpr hacking and 
 destructuring of std::tuples. Damn that was satisfying, yet horrible and non-extensive looking. Love it still.
+This means no more zip_two(a, b) or zip_three(a,b,c) calls, but it's all hiding behind one interface zip(...).
 
 Example:
 ```cpp
     std::vector<int> A{1,2,3};
     std::vector<int> B{4,5,6};
 
-    for(auto&& [a, b] : cxutils::zip_two(A, B)) {
+    for(auto&& [a, b] : cxutils::zip(A, B)) {
         std::cout << a << ", " << b << std::endl;
     }
-    // can now be written
-    for(auto&& [a, b] : cxutils::zip(A, B)) { /* ... */ }
     // or if we want to for some god ugly unknown reason, we can do this;
     for(auto&& [a, b, a2, b2, a3] : cxutils::zip(A, B, A, B, A)) {
         // please lord why
     }
+    /// works with 3 different containers, of different types
+    std::list<int> lst{1,2,3,4};
+    std::vector<S> vec{S{"a"}, S{"b"}, S{"c"}, S{"d"}};
+    std::array<float, 4> arr{1.0f, 2.0f, -3.0f, 3.14f};
+    
+    for(auto [l, v, a] : cxutils::zip(lst, vec, arr)) {
+        // do stuff
+    }
+    
 ```
 
 This will print:
@@ -112,24 +144,27 @@ This will print:
 2, 5<br>
 3, 6<br>
 
+Remember. Even if you write auto [a, b], you are _not_ taking the contents of the containers' elements by value.
+What you are receiving by my library, is a tuple of references to the elements in the container. This means
+that they will be mutable and not protected from you being stupid, and since I'm stupid, let's not compound the
+possibilities for disaster here.
+
 To mutate the elements, you have to do nothing different. So for instance:
 
 ```cpp
     std::vector<int> A{1,2,3};
     std::vector<int> B{4,5,6};
 
-    for(auto&& [a, b] : cxutils::zip_two(A, B)) {
+    for(auto [a, b] : cxutils::zip(A, B)) {
         a += b;
         b = a;
     }
-    for(auto&& [a, b] : cxutils::zip_two(A, B)) {
+    for(auto [a, b] : cxutils::zip(A, B)) {
         std::cout << a << ", " << b << std::endl;
     }
 ```
 
-Will print 
+Will print:<br> 
 5, 5<br>
 7, 7<br>
 9, 9<br>
-
-Zipping three iterators, work exactly the same, with the call being to ```cxutils::zip_three(a, b, c)```

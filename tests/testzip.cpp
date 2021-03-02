@@ -4,6 +4,7 @@
 //
 #include <array>
 #include <vector>
+#include <list>
 #include <iostream>
 #include <string>
 
@@ -38,8 +39,8 @@ int main() {
   std::vector<double> d{3.1, 2.2, 1.3};
 
   std::vector<int> ca{1, 2, 3};
-  std::vector<int> cb{4, 5, 6, 7};
-  std::vector<int> cc{7, 8, 9, 10, 11};
+  std::list<int> cb{4, 5, 6, 7};
+  std::array cc{7, 8, 9, 10, 11};
 
 
   for(auto&& [a, b, c] : cxutils::zip_three(ca, cb, cc)) {
@@ -56,7 +57,7 @@ int main() {
 
 
   std::cout << "using my fully variadic template version:" << std::endl;
-  for(auto&& [a, b, c, d] : cxutils::zip(ca, cb, cc, i)) {
+  for(auto [a, b, c, d] : cxutils::zip(ca, cb, cc, i)) {
     std::cout << "a: " << a
               << ", b: " << b
               << ", c: " << c
