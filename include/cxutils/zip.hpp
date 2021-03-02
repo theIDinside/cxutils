@@ -107,7 +107,7 @@ private:
   constexpr static auto size_ = sizeof...(Its);
 
 public:
-  constexpr explicit Zip(Its &&...its) noexcept : it_begins{std::make_tuple(std::forward<IteratorOf<Its>>(its.begin())...)}, it_ends{std::make_tuple(std::forward<IteratorOf<Its>>(its.end())...)} {
+  constexpr explicit Zip(Its &&...its) noexcept : it_begins{std::make_tuple(its.begin()...)}, it_ends{std::make_tuple(its.end()...)} {
 #ifdef DEBUG
     std::cout << "Sizes of containers: ";
     ((std::cout << (its.size()) << ","), ...);
