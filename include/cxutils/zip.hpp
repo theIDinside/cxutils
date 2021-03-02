@@ -107,7 +107,7 @@ private:
   constexpr static auto size_ = sizeof...(Its);
 
 public:
-  constexpr explicit Zip(Its &&...its) noexcept {
+  constexpr explicit Zip(Its &&...its) noexcept : it_begins{std::make_tuple(std::forward<IteratorOf<Its>>(its.begin())...)}, it_ends{std::make_tuple(std::forward<IteratorOf<Its>>(its.end())...)} {
 #ifdef DEBUG
     std::cout << "Sizes of containers: ";
     ((std::cout << (its.size()) << ","), ...);
@@ -116,8 +116,8 @@ public:
     static_assert(size() >= 2 && size() <= 6,
                   "Zip only supports 2 to 6 containers to iterate over. This "
                   "is arbitrary. But so is life. So f##k you.");
-    init_begin_iters(its.begin()...);
-    init_end_iters(its.end()...);
+    // init_begin_iters(its.begin()...);
+    // init_end_iters(its.end()...);
   }
   constexpr auto begin() const { return *this; }
   constexpr auto end() const { return *this; }
