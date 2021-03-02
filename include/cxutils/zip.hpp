@@ -116,29 +116,9 @@ public:
     static_assert(size() >= 2 && size() <= 6,
                   "Zip only supports 2 to 6 containers to iterate over. This "
                   "is arbitrary. But so is life. So f##k you.");
-    // init_begin_iters(its.begin()...);
-    // init_end_iters(its.end()...);
   }
   constexpr auto begin() const { return *this; }
   constexpr auto end() const { return *this; }
-
-  template <typename... Iterators>
-  constexpr auto init_begin_iters(Iterators &&...iters) {
-#ifdef DEBUG
-    std::cout << "begin Iters inited: " << sizeof...(iters)
-              << "begin values:" << std::endl;
-    ((std::cout << (*iters) << ","), ...);
-#endif
-    it_begins = std::make_tuple(std::forward<Iterators>(iters)...);
-  }
-
-  template <typename... Iterators>
-  constexpr auto init_end_iters(Iterators &&...iters) {
-#ifdef DEBUG
-    std::cout << "end Iters inited: " << sizeof...(iters) << std::endl;
-#endif
-    it_ends = std::make_tuple(std::forward<Iterators>(iters)...);
-  }
 
   /// Constexpr magic. This boils away. Or at least I think it does.
   /// Perhaps? Yes. Yes? Yes. Maybe.
