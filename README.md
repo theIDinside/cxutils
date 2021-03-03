@@ -109,6 +109,11 @@ index: 3, value: 4
 
 ## Zip-iterator
 
+#### Usage constraints
+- You can't use containers which are const, which means the iterations can never be immutable (you can obviously
+  choose not to mutate the elements. But that's just what it is.)
+
+
 Zips together 2 or more (up to 6) iterators from two containers, and iterates until one of them reaches it's end.
 
 ``` cxutils::zip(...)``` now does exist and it can take up to 6 containers. This is done using some extra-ordinary fine

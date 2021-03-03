@@ -7,9 +7,7 @@
 #include <list>
 #include <iostream>
 #include <string>
-
 #include <cxutils/zip.hpp>
-
 
 int main() {
   std::array<char, 8> A{'h', 'l', 'o', ' ', 'o',
@@ -17,12 +15,22 @@ int main() {
   // as soon as one container runs out
   std::array<char, 7> B{'e', 'l', ',', 'w', 'r', 'd', '!'};
 
+  const std::array<char, 8> cA{'h', 'l', 'o', ' ', 'o',
+                        'l', '!', '_'}; // last _ char to show that zip(..) ends
+  // as soon as one container runs out
+  const std::array<char, 7> cB{'e', 'l', ',', 'w', 'r', 'd', '!'};
+
   // zip-iterating over A and B
-  for (auto &&[a, b] : cxutils::zip(A, B)) {
+  for (const auto [a, b] : cxutils::zip(A, B)) {
     std::cout << a << b;
+    a = std::toupper(a);
   }
   // output: "hello, world!!"
   std::cout << std::endl;
+
+  for (const auto [a, b] : cxutils::zip(A, B)) {
+    std::cout << a << b;
+  }
 
   std::array<char, 6> A2{'h', 'l', 'o', ' ', 'o', 'l'};
   std::array<char, 7> B2{
@@ -72,5 +80,4 @@ int main() {
   for(const auto [a, b, c] : cxutils::zip(c1,c2,c3)) {
     std::cout << "a: " << a << ", b: " << b << ", c: " << c << "\n";
   }
-
 }
