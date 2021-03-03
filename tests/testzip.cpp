@@ -18,7 +18,7 @@ int main() {
   std::array<char, 7> B{'e', 'l', ',', 'w', 'r', 'd', '!'};
 
   // zip-iterating over A and B
-  for (auto &&[a, b] : cxutils::zip_two(A, B)) {
+  for (auto &&[a, b] : cxutils::zip(A, B)) {
     std::cout << a << b;
   }
   // output: "hello, world!!"
@@ -30,7 +30,7 @@ int main() {
       'r', 'd', '!'}; // last ! char to show that zip(..) ends as soon as one
   // container runs out of elements
 
-  for (auto [a, b] : cxutils::zip_two(A2, B2)) {
+  for (auto [a, b] : cxutils::zip(A2, B2)) {
     std::cout << a << b;
   }
   // output: "hello, world"
@@ -42,16 +42,8 @@ int main() {
   std::list<int> cb{4, 5, 6, 7};
   std::array cc{7, 8, 9, 10, 11};
 
-
-  for(auto&& [a, b, c] : cxutils::zip_three(ca, cb, cc)) {
-    std::cout << "a: " << a << ", b: " << b << ", c: " << c << "\n";
-    a *= 10;
-    b *= 20;
-    c *= 30;
-  }
-
   std::cout << "using my variadic template version, statically dispatching to ZipTwo and ZipThree...:" << std::endl;
-  for(auto&& [a, b, c] : cxutils::zip(ca, cb, cc)) {
+  for(auto [a, b, c] : cxutils::zip(ca, cb, cc)) {
     std::cout << "a: " << a << ", b: " << b << ", c: " << c << "\n";
   }
 
@@ -73,5 +65,12 @@ int main() {
     std::cout << "a: " << a << ", b: " << b << ", c: " << c << ", d: " << d << "\n";
   }
 
+  std::vector<int> c1{1,2,3};
+  std::vector<int> c2{11,22,33};
+  std::vector<int> c3{111,222,333};
+
+  for(const auto [a, b, c] : cxutils::zip(c1,c2,c3)) {
+    std::cout << "a: " << a << ", b: " << b << ", c: " << c << "\n";
+  }
 
 }
