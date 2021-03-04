@@ -173,3 +173,36 @@ Will print:<br>
 5, 5<br>
 7, 7<br>
 9, 9<br>
+
+
+## Cmake utils
+In the folder cmake, custom quick go-to utilities for CMake are placed. Currently, it consists of
+- CustomFunctions.cmake
+
+In this file, simple function calls are defined for creating a library / project. An example of 
+defining an executable using this function would be:
+
+```cmake
+set(SOURCES src/main.cpp src/app.cpp src/app.hpp)
+SetupExecutable(
+        NAME ${PROJECT_NAME}
+        CXX20 True
+        SOURCES ${SOURCES}
+        INCLUDE_DIRS src deps/some_lib/include
+        DEPENDENCIES fmt glfw)
+```
+
+This basically expands to
+```cmake
+add_executable(${PROJECT_NAME} ${SOURCES})
+target_include_directories(${PROJECT_NAME} PRIVATE src)
+target_include_directories(${PROJECT_NAME} PRIVATE deps/some_lib/include)
+target_link_libraries(${PROJECT_NAME} fmt glfw)
+SET_CXX_20(${PROJECT_NAME})
+set_target_properties(${PROJECT_NAME} PROPERTIES
+        CXX_STANDARD 20
+        CXX_STANDARD_REQUIRED True
+        CXX_EXTENSIONS FALSE)
+```
+
+Further utilities will be added to this interface later on.
