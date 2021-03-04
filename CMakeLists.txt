@@ -1,9 +1,9 @@
 cmake_minimum_required(VERSION 3.16)
 project(cxutils LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 20)
-include(cmake/CustomFunctions.cmake)
+list(APPEND CMAKE_MODULE_PATH ./cmake)
+include(./cmake/CustomFunctions.cmake)
 set(CXUTILS_LIB_INCLUDE_DIR "${PROJECT_SOURCE_DIR}/include")
-
 set(LibSources
         include/cxutils/cxutils.hpp
         include/cxutils/enumerate.hpp
