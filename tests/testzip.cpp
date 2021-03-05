@@ -28,6 +28,7 @@ int main() {
     a = std::toupper(a);
     b = std::toupper(b);
   }
+
   std::cout << "iterating after mutation of hello world:\n";
   for (const auto [a, b] : cxutils::zip(A, B)) {
     std::cout << a << b;

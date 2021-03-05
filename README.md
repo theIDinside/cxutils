@@ -112,7 +112,22 @@ index: 3, value: 4
 #### Usage constraints
 - You can't use containers which are const, which means the iterations can never be immutable (you can obviously
   choose not to mutate the elements. But that's just what it is.)
+  UPDATE: Yay. I hacked together a solution by simply creating a ConstZip type instead. This does... not feel ok. Template
+  metaprogramming magic is supposed to be able to solve this, but alas, my skills is limited. However, it now works to do
+  the following:
+  
+```cpp
+  const std::array cA{'a', 'c', 'e'};
+  const std::array cB{'b', 'd', 'f'};
+  
+  for(auto [a, b] : cxutils::zip(cA, cB)) {
+      // and finally, we have reached singularity. Prepare for the AI take over
+      // this won't compile
+      a = std::toupper(a);
+  }
+```
 
+Notice however, that currently, iterating over a mix of const and non-const containers is not possible.
 
 Zips together 2 or more (up to 6) iterators from two containers, and iterates until one of them reaches it's end.
 
