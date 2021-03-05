@@ -21,12 +21,15 @@ int main() {
   const std::array<char, 7> cB{'e', 'l', ',', 'w', 'r', 'd', '!'};
 
 
-
   // zip-iterating over A and B
   for (const auto [a, b] : cxutils::zip(A, B)) {
     std::cout << a << b;
     a = std::toupper(a);
     b = std::toupper(b);
+  }
+
+  for (auto [a, b] : cxutils::czip(A, B)) {
+    std::cout << a << b;
   }
 
   std::cout << "iterating after mutation of hello world:\n";

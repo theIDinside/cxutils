@@ -3,8 +3,7 @@
 
 namespace cxutils {
 
-/// The fully variadic template version of Zip, taking anywhere between [2<=6]
-/// containers to iterate over.
+/// An Iterator adapter over 2-6 containers. Mutation of elements are possible
 template <Iterable... Its> class Zip {
 private:
   std::tuple<IteratorOf<Its>...> it_begins;
@@ -117,6 +116,7 @@ public:
   static constexpr auto size() { return size_; }
 };
 
+/// A Const Iterator adapter over 2-6 containers
 template <Iterable... Its> class ConstZip {
 private:
   std::tuple<ConstIteratorOf<Its>...> it_begins;
@@ -127,9 +127,11 @@ private:
   constexpr static auto size_ = sizeof...(Its);
 
 public:
-  constexpr explicit ConstZip(const Its& ...its) noexcept : it_begins{std::make_tuple(its.cbegin()...)}, it_ends{std::make_tuple(its.cend()...)} {
+  constexpr explicit ConstZip(const Its &...its) noexcept
+      : it_begins{std::make_tuple(its.cbegin()...)}, it_ends{std::make_tuple(
+                                                         its.cend()...)} {
     static_assert(size() >= 2 && size() <= 6,
-                  "Zip only supports 2 to 6 containers to iterate over. This "
+                  "ConstZip only supports 2 to 6 containers to iterate over. This "
                   "is arbitrary. But so is life. So f##k you.");
   }
 
@@ -140,7 +142,7 @@ public:
   /// Perhaps? Yes. Yes? Yes. Maybe.
   constexpr bool operator!=(const ConstZip<Its...> &) const {
     static_assert(size() >= 2 && size() <= 6,
-                  "The ziperator currently only supports [2<=6] iterators. "
+                  "The const-ziperator currently only supports [2<=6] iterators. "
                   "Because I am hacking this together");
     if constexpr (size_ == 2) {
       const auto &[a_b, b_b] = it_begins;
@@ -168,7 +170,7 @@ public:
 
   constexpr ConstZip &operator++() {
     static_assert(size() >= 2 && size() <= 6,
-                  "The ziperator currently only supports [2<=6] iterators. "
+                  "The const-ziperator currently only supports [2<=6] iterators. "
                   "Because I am hacking this together");
     if constexpr (size_ == 2) {
       auto &[a, b] = it_begins;
@@ -206,7 +208,7 @@ public:
 
   constexpr auto operator*() const -> Zipped {
     static_assert(size() >= 2 && size() <= 6,
-                  "The ziperator currently only supports [2<=6] container "
+                  "The const-ziperator currently only supports [2<=6] container "
                   "iterators. Live with it");
     if constexpr (size_ == 2) {
       const auto &[a, b] = it_begins;
@@ -230,14 +232,19 @@ public:
 };
 
 /// Interface via which we use the Zip-iterator.
-template <Iterable... Its> constexpr auto zip(Its &&...its) {
+template <Iterable... Its> inline constexpr auto zip(Its &&...its) {
   return Zip<Its...>{std::forward<Its>(its)...};
 }
 
-template <Iterable... Its> constexpr auto zip(const Its &...its) {
-  return ConstZip<const Its&...>{its...};
+/// Overloaded call to zip, to handle cases where the containers iterated over are immutable (const)
+template <Iterable... Its> inline constexpr auto zip(const Its &...its) {
+  return ConstZip<const Its &...>{its...};
 }
 
+/// Force the iteration to be over const references to the containers elements
+template <Iterable... Its> inline constexpr auto czip(Its &&...its) {
+  return ConstZip<const Its&...>{its...};
+}
 
 
 } // namespace cxutils
