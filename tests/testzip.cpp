@@ -20,17 +20,26 @@ int main() {
   // as soon as one container runs out
   const std::array<char, 7> cB{'e', 'l', ',', 'w', 'r', 'd', '!'};
 
+
+
   // zip-iterating over A and B
   for (const auto [a, b] : cxutils::zip(A, B)) {
     std::cout << a << b;
     a = std::toupper(a);
+    b = std::toupper(b);
   }
-  // output: "hello, world!!"
-  std::cout << std::endl;
-
+  std::cout << "iterating after mutation of hello world:\n";
   for (const auto [a, b] : cxutils::zip(A, B)) {
     std::cout << a << b;
   }
+
+  std::cout << std::endl;
+
+  for (auto [a, b] : cxutils::zip(cA, cB)) {
+    std::cout << a << b;
+  }
+  // output: "hello, world!!"
+  std::cout << std::endl;
 
   std::array<char, 6> A2{'h', 'l', 'o', ' ', 'o', 'l'};
   std::array<char, 7> B2{
@@ -44,7 +53,6 @@ int main() {
   // output: "hello, world"
   std::cout << std::endl;
   std::vector<int> i{11, 22, 33};
-  std::vector<double> d{3.1, 2.2, 1.3};
 
   std::vector<int> ca{1, 2, 3};
   std::list<int> cb{4, 5, 6, 7};
