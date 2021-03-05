@@ -22,5 +22,10 @@ template <Iterable I>
 using IteratorOf          = std::conditional_t<std::is_const_v<I>, typename std::decay_t<I>::const_iterator, typename std::decay_t<I>::iterator>;
 template <Iterable I>
 using ElementReferenceOf  = std::conditional_t<std::is_const_v<I>, typename std::decay_t<I>::const_reference, typename std::decay_t<I>::reference>;
+
+template <Iterable I>
+using ConstElementReferenceOf  = typename std::decay_t<I>::const_reference;
+template <Iterable I>
+using ConstIteratorOf          = typename std::decay_t<I>::const_iterator;
 template <Iterable I>
 using ElementValueTypeOf = typename std::decay_t<I>::value_type;
