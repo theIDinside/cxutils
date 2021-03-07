@@ -233,13 +233,18 @@ public:
 
 /// Interface via which we use the Zip-iterator.
 template <Iterable... Its> inline constexpr auto zip(Its &&...its) {
-  return Zip<Its...>{std::forward<Its>(its)...};
+  if constexpr((std::is_const<typename std::remove_reference<Its>::type>::value && ...)) {
+    std::cout << "using the const ziperator" << std::endl;
+    return ConstZip<const Its&...>{its...};
+  } else if constexpr((!std::is_const<typename std::remove_reference<Its>::type>::value && ...)){
+    std::cout << "using the NON-const ziperator" << std::endl;
+    return Zip<Its...>{std::forward<Its>(its)...};
+  } else {
+    static_assert(false, "All containers must either be of const type, or non-const type. You can't mix them");
+  }
 }
 
 /// Overloaded call to zip, to handle cases where the containers iterated over are immutable (const)
-template <Iterable... Its> inline constexpr auto zip(const Its &...its) {
-  return ConstZip<const Its &...>{its...};
-}
 
 /// Force the iteration to be over const references to the containers elements
 template <Iterable... Its> inline constexpr auto czip(Its &&...its) {

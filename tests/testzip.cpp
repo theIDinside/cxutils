@@ -42,6 +42,7 @@ int main() {
   for (auto [a, b] : cxutils::zip(cA, cB)) {
     std::cout << a << b;
   }
+
   // output: "hello, world!!"
   std::cout << std::endl;
 
@@ -78,6 +79,17 @@ int main() {
     a += b;
     b += c;
     c += d;
+  }
+
+  const std::vector<int> const_ca{1, 2, 3};
+  const std::list<int> const_cb{4, 5, 6, 7};
+  const std::array const_cc{7, 8, 9, 10, 11};
+
+  for(auto [a, b, c] : cxutils::zip(const_ca, const_cb, const_cc)) {
+    std::cout << "const a: " << a
+              << ", const b: " << b
+              << ", const c: " << c
+              << std::endl;
   }
 
   std::cout << "after mutation. d is the only non-mutated element:\n";
