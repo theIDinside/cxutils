@@ -20,7 +20,7 @@ int main() {
       std::cout << *begin_message << ":\n";
     }
     const auto size = container.size();
-    auto i = 0;
+    size_t i = 0;
     for (const auto &e : container) {
       i++;
       printFn(e);

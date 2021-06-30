@@ -22,11 +22,13 @@ int main() {
 
 
   // zip-iterating over A and B
-  for (const auto [a, b] : cxutils::zip(A, B)) {
+  for (auto [a, b] : cxutils::zip(A, B)) {
     std::cout << a << b;
-    a = std::toupper(a);
-    b = std::toupper(b);
+    a = static_cast<char>(std::toupper(a));
+    b = static_cast<char>(std::toupper(b));
   }
+
+
 
   for (auto [a, b] : cxutils::czip(A, B)) {
     std::cout << a << b;
@@ -38,6 +40,7 @@ int main() {
   }
 
   std::cout << std::endl;
+
 
   for (auto [a, b] : cxutils::zip(cA, cB)) {
     std::cout << a << b;
@@ -57,8 +60,8 @@ int main() {
   }
   // output: "hello, world"
   std::cout << std::endl;
+  
   std::vector<int> i{11, 22, 33};
-
   std::vector<int> ca{1, 2, 3};
   std::list<int> cb{4, 5, 6, 7};
   std::array cc{7, 8, 9, 10, 11};
@@ -80,22 +83,23 @@ int main() {
     b += c;
     c += d;
   }
+  std::cout << "after mutation. d is the only non-mutated element:\n";
+  for(auto [a, b, c, d] : cxutils::zip(ca, cb, cc, i)) {
+    std::cout << "a: " << a << ", b: " << b << ", c: " << c << ", d: " << d << "\n";
+  }
 
   const std::vector<int> const_ca{1, 2, 3};
   const std::list<int> const_cb{4, 5, 6, 7};
   const std::array const_cc{7, 8, 9, 10, 11};
 
-  for(auto [a, b, c] : cxutils::zip(const_ca, const_cb, const_cc)) {
+  for(const auto [a, b, c] : cxutils::zip(const_ca, const_cb, const_cc)) {
     std::cout << "const a: " << a
               << ", const b: " << b
               << ", const c: " << c
               << std::endl;
   }
 
-  std::cout << "after mutation. d is the only non-mutated element:\n";
-  for(auto [a, b, c, d] : cxutils::zip(ca, cb, cc, i)) {
-    std::cout << "a: " << a << ", b: " << b << ", c: " << c << ", d: " << d << "\n";
-  }
+
 
   std::vector<int> c1{1,2,3};
   std::vector<int> c2{11,22,33};

@@ -20,8 +20,7 @@ int main() {
   for (auto &&[index, el] : cxutils::enumerate(ints)) {
     std::cout << "index: " << index << ", value: " << el << std::endl;
   }
-
-  auto m = cxutils::enumerate(ints);
+  
   std::cout << std::endl;
   std::vector<std::string> strings{"hello", "world", "goodbye", "world"};
 
