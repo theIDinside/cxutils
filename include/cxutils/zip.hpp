@@ -237,11 +237,9 @@ public:
 template <Iterable... Its> inline constexpr auto zip(Its &&...its) {
   if constexpr((std::is_const<typename std::remove_reference<Its>::type>::value && ...)) {
     static_assert(!(std::is_const<Its>::value && ...), "All containers are const");
-    std::cout << "using the const ziperator" << std::endl;
     return ConstZip<Its...>{its...};
   } else if constexpr((!std::is_const<typename std::remove_reference<Its>::type>::value && ...)){
     static_assert((!std::is_const<typename std::remove_reference<Its>::type>::value && ...), "All containers are non-const");
-    std::cout << "!!!!using the NON-const ziperator" << std::endl;
     return Zip<Its...>{std::forward<Its>(its)...};
   } else {
     static_assert(!(std::is_const<typename std::remove_reference<Its>::type>::value ^ ...), "All containers must either be of const type, or non-const type. You can't mix them");
