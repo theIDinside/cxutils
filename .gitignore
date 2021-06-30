@@ -3,3 +3,4 @@ cmake-build-debug/
 .idea/
 cmake-build-release 
 cmake-build-relwithdebinfo 
+.vscode/
