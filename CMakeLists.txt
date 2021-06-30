@@ -23,7 +23,7 @@ SetupLibrary(NAME cxutils
 # target_include_directories(cxutils INTERFACE $<BUILD_INTERFACE:${CXUTILS_LIB_INCLUDE_DIR}> $<INSTALL_INTERFACE:include>)
 # target_include_directories(cxutils INTERFACE ./include)
 
-set(CLANG_FLAGS -Wall -Wextra -Wshadow -Wnon-virtual-dtor -pedantic -Wold-style-cast -Wcast-align -Wunused -Woverloaded-virtual -Wconversion -Wsign-conversion -Wmisleading-indentation
+set(CLANG_FLAGS -Wall -Wextra -Wshadow -Wnon-virtual-dtor -pedantic -Wcast-align -Wunused -Woverloaded-virtual -Wconversion -Wsign-conversion -Wmisleading-indentation
         -Wnull-dereference -Wdouble-promotion -Wformat=2)
 
 set(GCC_FLAGS ${CLANG_FLAGS})
