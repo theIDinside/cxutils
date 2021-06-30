@@ -31,13 +31,13 @@ set(MSVC_FLAGS /W4 /w14242 /w14254 /w14263 /w14265 /w14287 /we4289 /w14296 /w143
 
 if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
     message("You are using CLANG. Setting CLANG flags: ${CLANG_FLAGS}")
-    target_compile_options(cxutils INTERFACE ${CLANG_FLAGS})
+    target_compile_options(cxutils BEFORE INTERFACE ${CLANG_FLAGS})
 elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
     message("You are using GCC. Setting GCC flags: ${GCC_FLAGS}")
-    target_compile_options(cxutils INTERFACE ${GCC_FLAGS})
+    target_compile_options(cxutils BEFORE INTERFACE ${GCC_FLAGS})
 elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
     message("You are using MSVC. Setting MSVC flags: ${MSVC_FLAGS}")
-    target_compile_options(cxutils INTERFACE ${MSVC_FLAGS})
+    target_compile_options(cxutils BEFORE INTERFACE ${MSVC_FLAGS})
 endif()
 
 SetupExecutable(NAME transform_test
